@@ -15,7 +15,7 @@ public class Ultrassom {
     public static void main(String[] args) {
         //System.out.println("Hello World!");
         // Definindo matrizes M e N e vetor a
-        DoubleMatrix M = new DoubleMatrix(new double[][]{{92,99,1,8,15,67,74,51,58,40},
+        /*DoubleMatrix M = new DoubleMatrix(new double[][]{{92,99,1,8,15,67,74,51,58,40},
                                                          {98,80,7,14,16,73,55,57,64,41},
                                                          {4,81,88,20,22,54,56,63,70,47},
                                                          {85,87,19,21,3,60,62,69,71,28},
@@ -68,6 +68,42 @@ public class Ultrassom {
 
         // Operação matricial Ma = M * a
         DoubleMatrix Ma = M.mmul(a);
-        System.out.println("Ma = M * a:\n" + Ma);
+        System.out.println("Ma = M * a:\n" + Ma);*/
+        
+        // Defina a matriz do sistema linear e o vetor do lado direito
+        DoubleMatrix A = new DoubleMatrix(new double[][]{{4, -1, 0}, {-1, 4, -1}, {0, -1, 4}});
+        DoubleMatrix b = new DoubleMatrix(new double[]{15, 10, 10});
+
+        // Chute inicial para a solução
+        DoubleMatrix x0 = DoubleMatrix.zeros(b.length);
+
+        // Chame a função CG para resolver o sistema linear Ax = b
+        DoubleMatrix solution = conjugateGradient(A, b, x0, 1e-6, 1000);
+
+        // Imprima a solução
+        System.out.println("Solução encontrada: ");
+        System.out.println(solution);
+    }
+
+    private static DoubleMatrix conjugateGradient(DoubleMatrix A, DoubleMatrix b, DoubleMatrix x0, double tolerance, int maxIterations) {
+        int n = b.length;
+        DoubleMatrix x = x0.dup();
+        DoubleMatrix r = b.sub(A.mmul(x)); // r0 = b - Ax0
+        DoubleMatrix p = r.dup();
+        int iteration = 0;
+
+        while (r.norm2() > tolerance && iteration < maxIterations) {
+            DoubleMatrix Ap = A.mmul(p);
+            double alpha = r.dot(r) / p.dot(Ap);
+            x.addi(p.mul(alpha));
+            r.subi(Ap.mul(alpha));
+
+            double beta = r.dot(r) / p.dot(Ap);
+            p.muli(beta).addi(r);
+
+            iteration++;
+        }
+
+        return x;
     }
 }

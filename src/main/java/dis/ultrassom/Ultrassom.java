@@ -71,39 +71,72 @@ public class Ultrassom {
         System.out.println("Ma = M * a:\n" + Ma);*/
         
         // Defina a matriz do sistema linear e o vetor do lado direito
-        DoubleMatrix A = new DoubleMatrix(new double[][]{{4, -1, 0}, {-1, 4, -1}, {0, -1, 4}});
-        DoubleMatrix b = new DoubleMatrix(new double[]{15, 10, 10});
+        // H - Matriz de modelo
+        // g - Vetor de sinal
+        DoubleMatrix H = new DoubleMatrix(new double[][]{{4, 1}, {1, 3}});
+        DoubleMatrix g = new DoubleMatrix(new double[]{1, 2});
 
         // Chute inicial para a solução
-        DoubleMatrix x0 = DoubleMatrix.zeros(b.length);
+        DoubleMatrix f0 = DoubleMatrix.zeros(g.length);
 
+        
         // Chame a função CG para resolver o sistema linear Ax = b
-        DoubleMatrix solution = conjugateGradient(A, b, x0, 1e-6, 1000);
+        DoubleMatrix solutionCGNR = CGNR(H, g, f0, 1e-10, 1000);
+        DoubleMatrix solutionCGNE = CGNE(H, g, 100);
 
         // Imprima a solução
-        System.out.println("Solução encontrada: ");
-        System.out.println(solution);
+        System.out.println("Solução CGNR encontrada: ");
+        System.out.println(solutionCGNR);
+        System.out.println("Solução CGNE encontrada: ");
+        System.out.println(solutionCGNE);
     }
 
-    private static DoubleMatrix conjugateGradient(DoubleMatrix A, DoubleMatrix b, DoubleMatrix x0, double tolerance, int maxIterations) {
-        int n = b.length;
-        DoubleMatrix x = x0.dup();
-        DoubleMatrix r = b.sub(A.mmul(x)); // r0 = b - Ax0
-        DoubleMatrix p = r.dup();
+    private static DoubleMatrix CGNR (DoubleMatrix H, DoubleMatrix g, DoubleMatrix f0, double tolerance, int maxIterations) {
+        DoubleMatrix f = f0.dup();
+        DoubleMatrix r = g.sub(H.mmul(f)); // r0 = g - Hf0
+        DoubleMatrix z = H.transpose().mmul(r); // z0 = H^T * r0
+        DoubleMatrix p = z.dup();
         int iteration = 0;
 
         while (r.norm2() > tolerance && iteration < maxIterations) {
-            DoubleMatrix Ap = A.mmul(p);
-            double alpha = r.dot(r) / p.dot(Ap);
-            x.addi(p.mul(alpha));
-            r.subi(Ap.mul(alpha));
-
-            double beta = r.dot(r) / p.dot(Ap);
-            p.muli(beta).addi(r);
+            DoubleMatrix w = H.mmul(p);
+            double alpha = z.dot(z) / w.dot(w);
+            f.addi(p.mul(alpha));
+            r.subi(w.mul(alpha));
+            z = H.transpose().mmul(r);
+            double beta = z.dot(z) / p.dot(p);
+            p = z.add(p.mul(beta));
 
             iteration++;
         }
 
-        return x;
+        return f;
+    }
+
+    private static DoubleMatrix CGNE (DoubleMatrix H, DoubleMatrix g, int maxIterations) {
+        int N = H.columns;
+
+        // Inicialização de variáveis para CGNE
+        DoubleMatrix f = DoubleMatrix.zeros(N);
+        DoubleMatrix r = g.dup(); // r0 = g - Hf0
+        DoubleMatrix p = H.transpose().mmul(r); // p0 = H^T * r0
+
+        // Algoritmo CGNE
+        for (int i = 0; i < maxIterations; i++) {
+            DoubleMatrix Ap = H.mmul(p);
+            //double tempr = r.dot(r);
+            DoubleMatrix rb = r.dup();
+            double alpha = r.dot(r) / p.dot(p);
+            f.addi(p.mul(alpha));
+            r.subi(H.mmul(p).mul(alpha));
+        //System.out.println("rsubi dot: ");
+        //System.out.println(r.dot(r));
+            double beta = r.dot(r) / p.dot(Ap);
+            p = H.transpose().mmul(r).addi(p.mul(beta));
+        //System.out.println(r);
+        }
+
+       //System.out.println(r);
+        return f;
     }
 }

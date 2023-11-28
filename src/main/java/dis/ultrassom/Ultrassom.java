@@ -26,7 +26,7 @@ public class Ultrassom {
     public static void main(String[] args) {
         DoubleMatrix H = null;
         DoubleMatrix g = null;
-        // Caminho para o arquivo CSV
+        
         String filePathH = "C:\\Users\\Isabela V. Santos\\Documents\\NetBeansProjects\\ultrassom\\arquivos teste\\M.csv";
 
         try {
@@ -41,7 +41,7 @@ public class Ultrassom {
             
             H = convertToDoubleMatrix(allData);
             
-            // Exemplo de uso da matriz
+            
             System.out.println("Matriz lida do arquivo CSV:");
             System.out.println(H);
             
@@ -62,9 +62,9 @@ public class Ultrassom {
             List<String[]> allData = reader.readAll();
             System.out.println(allData);
             
-            g = convertToDoubleMatrix(allData);
+            g = convertToDoubleMatrixVectorColumn(allData);
             
-            // Exemplo de uso da matriz
+            
             System.out.println("Vetor de sinal lido do arquivo CSV:");
             System.out.println(g);
             
@@ -79,11 +79,9 @@ public class Ultrassom {
         System.out.println("g.length: ");
         System.out.println(g.length);
         
-        // Chame a função CG para resolver o sistema linear Ax = b
         DoubleMatrix solutionCGNR = CGNR(H, g, f0, 1e-10, 1000);
         //DoubleMatrix solutionCGNE = CGNE(H, g, 100);
 
-        // Imprima a solução
         System.out.println("Solução CGNR encontrada: ");
         System.out.println(solutionCGNR);
         //System.out.println("Solução CGNE encontrada: ");
@@ -115,12 +113,10 @@ public class Ultrassom {
     private static DoubleMatrix CGNE (DoubleMatrix H, DoubleMatrix g, int maxIterations) {
         int N = H.columns;
 
-        // Inicialização de variáveis para CGNE
         DoubleMatrix f = DoubleMatrix.zeros(N);
         DoubleMatrix r = g.dup(); // r0 = g - Hf0
         DoubleMatrix p = H.transpose().mmul(r); // p0 = H^T * r0
 
-        // Algoritmo CGNE
         for (int i = 0; i < maxIterations; i++) {
             DoubleMatrix Ap = H.mmul(p);
             //double tempr = r.dot(r);
@@ -143,18 +139,35 @@ public class Ultrassom {
         int numRows = data.size();
         int numCols = data.get(0).length;
         
-        System.out.println("numRows: ");
-        System.out.println(numRows);
-        System.out.println("numCols: ");
-        System.out.println(numCols);
-        
         DoubleMatrix matrix = new DoubleMatrix(numRows, numCols);
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
                 matrix.put(i, j, Double.parseDouble(data.get(i)[j]));
             }
         }
-
+        return matrix;
+    }
+    
+    private static DoubleMatrix convertToDoubleMatrixVectorColumn(List<String[]> data) {
+        DoubleMatrix matrix = null;
+        int numRows = data.size();
+        int numCols = data.get(0).length;
+        
+        if (numRows < numCols) {
+            matrix = new DoubleMatrix(numCols, 1);
+            for (int i = 0; i < numCols; i++) {
+                matrix.put(i, 0, Double.parseDouble(data.get(0)[i]));
+            }
+            return matrix;
+        }
+        else {
+            matrix = new DoubleMatrix(numRows, numCols);
+            for (int i = 0; i < numRows; i++) {
+                for (int j = 0; j < numCols; j++) {
+                    matrix.put(i, j, Double.parseDouble(data.get(i)[j]));
+                }
+            }
+        }
         return matrix;
     }
 }

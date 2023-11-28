@@ -24,55 +24,21 @@ import java.util.Arrays;
 public class Ultrassom {
 
     public static void main(String[] args) {
-        DoubleMatrix H = null;
-        DoubleMatrix g = null;
         
-        String filePathH = "C:\\Users\\Isabela V. Santos\\Documents\\NetBeansProjects\\ultrassom\\arquivos teste\\M.csv";
+        List<String[]> stringH = convertFileToString("C:\\Users\\Isabela V. Santos\\Documents\\NetBeansProjects\\ultrassom\\arquivos teste\\M.csv");
+        List<String[]> stringg = convertFileToString("C:\\Users\\Isabela V. Santos\\Documents\\NetBeansProjects\\ultrassom\\arquivos teste\\a.csv");
 
-        try {
-            CSVReader reader = new CSVReaderBuilder(new FileReader(filePathH))
-                .withCSVParser(new CSVParserBuilder()
-                        .withSeparator(';')
-                        .build())
-                .build();
+      
+        DoubleMatrix H = convertToDoubleMatrix(stringH);  
+        DoubleMatrix g = convertToDoubleMatrix(stringg);
+              
             
-            List<String[]> allData = reader.readAll();
-            System.out.println(allData);
+        System.out.println("Matriz lida do arquivo CSV:");
+        System.out.println(H);  
             
-            H = convertToDoubleMatrix(allData);
-            
-            
-            System.out.println("Matriz lida do arquivo CSV:");
-            System.out.println(H);
-            
-        } catch (IOException | CsvException e) {
-            e.printStackTrace();
-        }
+        System.out.println("Vetor de sinal lido do arquivo CSV:");
+        System.out.println(g);
         
-        
-        String filePathg = "C:\\Users\\Isabela V. Santos\\Documents\\NetBeansProjects\\ultrassom\\arquivos teste\\a.csv";
-        
-        try {
-            CSVReader reader = new CSVReaderBuilder(new FileReader(filePathg))
-                .withCSVParser(new CSVParserBuilder()
-                        .withSeparator(';')
-                        .build())
-                .build();
-            
-            List<String[]> allData = reader.readAll();
-            System.out.println(allData);
-            
-            g = convertToDoubleMatrixVectorColumn(allData);
-            
-            
-            System.out.println("Vetor de sinal lido do arquivo CSV:");
-            System.out.println(g);
-            
-        } catch (IOException | CsvException e) {
-            e.printStackTrace();
-        }
-        
-
         // Chute inicial para a solução
         DoubleMatrix f0 = DoubleMatrix.zeros(g.length);
 
@@ -86,6 +52,26 @@ public class Ultrassom {
         System.out.println(solutionCGNR);
         //System.out.println("Solução CGNE encontrada: ");
         //System.out.println(solutionCGNE);
+    }
+
+    private static List<String[]> convertFileToString (String filePath) {
+        try {
+            CSVReader reader = new CSVReaderBuilder(new FileReader(filePath))
+                .withCSVParser(new CSVParserBuilder()
+                        .withSeparator(';')
+                        .build())
+                .build();
+            
+            List<String[]> allData = reader.readAll();
+            System.out.println(allData);
+            
+            
+            return allData;
+            
+        } catch (IOException | CsvException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private static DoubleMatrix CGNR (DoubleMatrix H, DoubleMatrix g, DoubleMatrix f0, double tolerance, int maxIterations) {
@@ -136,19 +122,6 @@ public class Ultrassom {
     }
     
     private static DoubleMatrix convertToDoubleMatrix(List<String[]> data) {
-        int numRows = data.size();
-        int numCols = data.get(0).length;
-        
-        DoubleMatrix matrix = new DoubleMatrix(numRows, numCols);
-        for (int i = 0; i < numRows; i++) {
-            for (int j = 0; j < numCols; j++) {
-                matrix.put(i, j, Double.parseDouble(data.get(i)[j]));
-            }
-        }
-        return matrix;
-    }
-    
-    private static DoubleMatrix convertToDoubleMatrixVectorColumn(List<String[]> data) {
         DoubleMatrix matrix = null;
         int numRows = data.size();
         int numCols = data.get(0).length;

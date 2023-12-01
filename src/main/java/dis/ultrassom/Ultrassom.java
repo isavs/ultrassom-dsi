@@ -12,20 +12,25 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.Arrays;
 
-/**
- *
- * @author Isabela V. Santos
- */
+@SpringBootApplication
 public class Ultrassom {
 
     public static void main(String[] args) {
         
-        List<String[]> stringH = convertFileToString("C:\\Users\\Isabela V. Santos\\Documents\\NetBeansProjects\\ultrassom\\arquivos teste\\M.csv");
+        /*List<String[]> stringH = convertFileToString("C:\\Users\\Isabela V. Santos\\Documents\\NetBeansProjects\\ultrassom\\arquivos teste\\M.csv");
         List<String[]> stringg = convertFileToString("C:\\Users\\Isabela V. Santos\\Documents\\NetBeansProjects\\ultrassom\\arquivos teste\\a.csv");
 
       
@@ -51,9 +56,12 @@ public class Ultrassom {
         System.out.println("Solução CGNR encontrada: ");
         System.out.println(solutionCGNR);
         //System.out.println("Solução CGNE encontrada: ");
-        //System.out.println(solutionCGNE);
+        //System.out.println(solutionCGNE);*/
+        
+        SpringApplication.run(Ultrassom.class, args);
+        
     }
-
+/*
     private static List<String[]> convertFileToString (String filePath) {
         try {
             CSVReader reader = new CSVReaderBuilder(new FileReader(filePath))
@@ -142,5 +150,23 @@ public class Ultrassom {
             }
         }
         return matrix;
-    }
+    }*/
+	
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/").allowedOrigins("http://localhost:8080");
+			}
+		};
+	}
+        
+        @Configuration
+        public class WebConfig implements WebMvcConfigurer {
+            @Override
+            public void addResourceHandlers(ResourceHandlerRegistry registry) {
+                registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
+            }
+        }
 }

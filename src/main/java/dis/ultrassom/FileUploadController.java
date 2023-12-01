@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import java.nio.file.StandardCopyOption;
 @RestController
 @RequestMapping("/upload")
 public class FileUploadController {
-
+    @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping
     public String handleFileUpload(@RequestParam("file") MultipartFile file) {
         if (file != null && !file.isEmpty()) {

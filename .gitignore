@@ -1,2 +1,4 @@
+node_modules
+
 # Ignore todos os arquivos de texto
 *.csv

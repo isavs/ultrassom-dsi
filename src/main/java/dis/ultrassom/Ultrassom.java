@@ -6,11 +6,7 @@ package dis.ultrassom;
 
 import org.jblas.DoubleMatrix;
 
-import com.opencsv.CSVReader;
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReaderBuilder;
-import com.opencsv.exceptions.CsvException;
+import dis.ultrassom.Parser.ParseCSV;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
@@ -29,32 +26,31 @@ import java.util.Arrays;
 public class Ultrassom {
 
     public static void main(String[] args) {
-        
-        /*List<String[]> stringH = convertFileToString("C:\\Users\\Isabela V. Santos\\Documents\\NetBeansProjects\\ultrassom\\arquivos teste\\M.csv");
-        List<String[]> stringg = convertFileToString("C:\\Users\\Isabela V. Santos\\Documents\\NetBeansProjects\\ultrassom\\arquivos teste\\a.csv");
+        List<String[]> stringH = ParseCSV.toString("src/main/java/dis/test_files/aM.csv", ';');
+        List<String[]> stringg = ParseCSV.toString("src/main/java/dis/test_files/MN.csv", ';');
 
       
-        DoubleMatrix H = convertToDoubleMatrix(stringH);  
-        DoubleMatrix g = convertToDoubleMatrix(stringg);
+        DoubleMatrix H = ParseCSV.toDoubleMatrix(stringH);  
+        DoubleMatrix g = ParseCSV.toDoubleMatrix(stringg);
               
             
-        System.out.println("Matriz lida do arquivo CSV:");
-        System.out.println(H);  
+        //System.out.println("Matriz lida do arquivo CSV:");
+        //System.out.println(H);  
             
-        System.out.println("Vetor de sinal lido do arquivo CSV:");
-        System.out.println(g);
+       //System.out.println("Vetor de sinal lido do arquivo CSV:");
+       //System.out.println(g);
         
         // Chute inicial para a solução
-        DoubleMatrix f0 = DoubleMatrix.zeros(g.length);
+        //DoubleMatrix f0 = DoubleMatrix.zeros(g.length);
 
-        System.out.println("g.length: ");
-        System.out.println(g.length);
+        //System.out.println("g.length: ");
+        //System.out.println(g.length);
         
-        DoubleMatrix solutionCGNR = CGNR(H, g, f0, 1e-10, 1000);
+        //DoubleMatrix solutionCGNR = CGNR(H, g, f0, 1e-10, 1000);
         //DoubleMatrix solutionCGNE = CGNE(H, g, 100);
 
-        System.out.println("Solução CGNR encontrada: ");
-        System.out.println(solutionCGNR);
+        //System.out.println("Solução CGNR encontrada: ");
+        //System.out.println(solutionCGNR);
         //System.out.println("Solução CGNE encontrada: ");
         //System.out.println(solutionCGNE);*/
         
@@ -62,26 +58,6 @@ public class Ultrassom {
         
     }
 /*
-    private static List<String[]> convertFileToString (String filePath) {
-        try {
-            CSVReader reader = new CSVReaderBuilder(new FileReader(filePath))
-                .withCSVParser(new CSVParserBuilder()
-                        .withSeparator(';')
-                        .build())
-                .build();
-            
-            List<String[]> allData = reader.readAll();
-            System.out.println(allData);
-            
-            
-            return allData;
-            
-        } catch (IOException | CsvException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     private static DoubleMatrix CGNR (DoubleMatrix H, DoubleMatrix g, DoubleMatrix f0, double tolerance, int maxIterations) {
         DoubleMatrix f = f0.dup();
         DoubleMatrix r = g.sub(H.mmul(f)); // r0 = g - Hf0
@@ -128,29 +104,7 @@ public class Ultrassom {
        //System.out.println(r);
         return f;
     }
-    
-    private static DoubleMatrix convertToDoubleMatrix(List<String[]> data) {
-        DoubleMatrix matrix = null;
-        int numRows = data.size();
-        int numCols = data.get(0).length;
-        
-        if (numRows < numCols) {
-            matrix = new DoubleMatrix(numCols, 1);
-            for (int i = 0; i < numCols; i++) {
-                matrix.put(i, 0, Double.parseDouble(data.get(0)[i]));
-            }
-            return matrix;
-        }
-        else {
-            matrix = new DoubleMatrix(numRows, numCols);
-            for (int i = 0; i < numRows; i++) {
-                for (int j = 0; j < numCols; j++) {
-                    matrix.put(i, j, Double.parseDouble(data.get(i)[j]));
-                }
-            }
-        }
-        return matrix;
-    }*/
+*/
 	
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {

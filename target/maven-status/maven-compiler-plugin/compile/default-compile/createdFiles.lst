@@ -1,4 +1,14 @@
+dis\ultrassom\model\Image.class
+dis\ultrassom\controller\FileUploadController.class
+dis\ultrassom\algorithm\CGNRAlgorithm.class
+dis\ultrassom\controller\UltrassomController.class
+dis\ultrassom\model\Signal.class
+dis\ultrassom\util\ImageGenerator.class
+dis\ultrassom\algorithm\CGNEAlgorithm.class
+dis\ultrassom\service\ImageReconstructionService.class
 dis\ultrassom\Ultrassom$WebConfig.class
-dis\ultrassom\FileUploadController.class
 dis\ultrassom\Ultrassom.class
 dis\ultrassom\Ultrassom$1.class
+dis\ultrassom\model\User.class
+dis\ultrassom\model\ReconstructionRequest.class
+dis\ultrassom\model\ReconstructionResult.class

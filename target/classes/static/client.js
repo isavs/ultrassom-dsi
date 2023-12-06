@@ -1,6 +1,8 @@
 function uploadFile() {
     const usernameInput = document.getElementById('username');
     const signalFileInput = document.getElementById('signalFile');
+    const algorithmChoice = document.getElementById("algorithm").value;
+
     const username = usernameInput.value;
 
     if (!username) {
@@ -15,30 +17,35 @@ function uploadFile() {
         return;
     }
 
+    const uniqueFileName = `user_${username}_${Date.now()}_${signalFile.name}`;
+
     const formData = new FormData();
     formData.append('username', username);
-    formData.append('signalFile', signalFile);
+    formData.append('file', signalFile);
+    formData.append('algorithmChoice', algorithmChoice);
+    formData.append('uniqueFileName', uniqueFileName);
 
-    fetch('/upload')
-        .then(response => response.json())
-        .then(data => {
-            // Adiciona a matriz H aleatória ao FormData
-            formData.append('modelMatrix', new Blob([data.matrix.map(row => row.join(',')).join('\n')], { type: 'text/csv' }));
+    fetch('/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('File uploaded successfully:', data);
+    })
+    .catch(error => {
+        console.error('Error uploading file:', error);
+    });
 
-            // Envia a requisição para o servidor
-            fetch('/api/reconstruct', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Image reconstructed successfully:', data);
-            })
-            .catch(error => {
-                console.error('Error reconstructing image:', error);
-            });
-        })
-        .catch(error => {
-            console.error('Error getting random model matrix:', error);
-        });
+    fetch('/reconstruct', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Image reconstructed successfully:', data);
+    })
+    .catch(error => {
+        console.error('Error reconstructing image:', error);
+    });
 }

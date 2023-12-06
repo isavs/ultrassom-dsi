@@ -1,2 +1,12 @@
-C:\Users\Isabela V. Santos\Documents\NetBeansProjects\ultrassom\src\main\java\dis\ultrassom\FileUploadController.java
+C:\Users\Isabela V. Santos\Documents\NetBeansProjects\ultrassom\src\main\java\dis\ultrassom\util\ImageGenerator.java
+C:\Users\Isabela V. Santos\Documents\NetBeansProjects\ultrassom\src\main\java\dis\ultrassom\model\ReconstructionRequest.java
+C:\Users\Isabela V. Santos\Documents\NetBeansProjects\ultrassom\src\main\java\dis\ultrassom\model\Signal.java
+C:\Users\Isabela V. Santos\Documents\NetBeansProjects\ultrassom\src\main\java\dis\ultrassom\model\Image.java
+C:\Users\Isabela V. Santos\Documents\NetBeansProjects\ultrassom\src\main\java\dis\ultrassom\model\ReconstructionResult.java
+C:\Users\Isabela V. Santos\Documents\NetBeansProjects\ultrassom\src\main\java\dis\ultrassom\algorithm\CGNRAlgorithm.java
+C:\Users\Isabela V. Santos\Documents\NetBeansProjects\ultrassom\src\main\java\dis\ultrassom\model\User.java
+C:\Users\Isabela V. Santos\Documents\NetBeansProjects\ultrassom\src\main\java\dis\ultrassom\algorithm\CGNEAlgorithm.java
+C:\Users\Isabela V. Santos\Documents\NetBeansProjects\ultrassom\src\main\java\dis\ultrassom\controller\FileUploadController.java
 C:\Users\Isabela V. Santos\Documents\NetBeansProjects\ultrassom\src\main\java\dis\ultrassom\Ultrassom.java
+C:\Users\Isabela V. Santos\Documents\NetBeansProjects\ultrassom\src\main\java\dis\ultrassom\controller\UltrassomController.java
+C:\Users\Isabela V. Santos\Documents\NetBeansProjects\ultrassom\src\main\java\dis\ultrassom\service\ImageReconstructionService.java

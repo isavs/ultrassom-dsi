@@ -1,14 +1,17 @@
 package dis.ultrassom.controller;
 
-import org.jblas.DoubleMatrix;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import dis.ultrassom.model.ReconstructionResult;
-import dis.ultrassom.model.ReconstructionRequest;
 import dis.ultrassom.model.User;
 import dis.ultrassom.service.ImageReconstructionService;
 
+@RestController
+@RequestMapping("/reconstruct")
 public class UltrassomController {
     private ImageReconstructionService reconstructionService;
 
@@ -16,13 +19,19 @@ public class UltrassomController {
         this.reconstructionService = reconstructionService;
     }
 
-    @PostMapping("/upload")
-    public ReconstructionResult reconstructImage(@RequestBody ReconstructionRequest request) {
-        User user = request.getUser();
-        DoubleMatrix g = request.getSignalVector();
-        DoubleMatrix H = request.getModelMatrix();
-        int algorithmChoice = request.getAlgorithmChoice();
+    @CrossOrigin(origins = "http://localhost:8080")
+    @PostMapping
+    public ReconstructionResult reconstructImage(
+            @RequestParam("username") String username,
+            @RequestParam("uniqueFileName") String uniqueFileName,
+            @RequestParam("algorithmChoice") int algorithmChoice) {
 
-        return reconstructionService.reconstructImage(user, g, H, algorithmChoice);
+        User user = new User(username);
+
+        ReconstructionResult result = reconstructionService.reconstructImage(user, uniqueFileName, algorithmChoice);
+
+        reconstructionService.generateImage(result.getImage(), "C:\\Users\\Isabela V. Santos\\Documents\\NetBeansProjects\\ultrassom\\arquivos teste");
+
+        return result;
     }
 }

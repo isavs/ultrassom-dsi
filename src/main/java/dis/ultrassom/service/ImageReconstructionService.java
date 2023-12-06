@@ -1,5 +1,7 @@
 package dis.ultrassom.service;
 
+import org.springframework.stereotype.Service;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -17,7 +19,9 @@ import dis.ultrassom.algorithm.CGNEAlgorithm;
 import dis.ultrassom.algorithm.CGNRAlgorithm;
 import dis.ultrassom.model.ReconstructionResult;
 import dis.ultrassom.model.User;
+import dis.ultrassom.util.ImageGenerator;
 
+@Service
 public class ImageReconstructionService {
     private CGNEAlgorithm cgneAlgorithm;
     private CGNRAlgorithm cgnrAlgorithm;
@@ -26,7 +30,6 @@ public class ImageReconstructionService {
         this.cgneAlgorithm = new CGNEAlgorithm();
         this.cgnrAlgorithm = new CGNRAlgorithm();
     }
-
 
     public DoubleMatrix getRandomModelMatrix() {
         String[] options = { "H-1.csv", "H-2.csv" };
@@ -90,8 +93,12 @@ public class ImageReconstructionService {
         return matrix;
     }
 
-    public ReconstructionResult reconstructImage(User user, DoubleMatrix g, DoubleMatrix H, int algorithmChoice) {
+    public ReconstructionResult reconstructImage(User user, String gName, int algorithmChoice) {
         LocalDateTime startTime = LocalDateTime.now();
+
+        DoubleMatrix H = getRandomModelMatrix();
+        List<String[]> gVector = convertFileToString(String.format("C:\\Users\\Isabela V. Santos\\Documents\\NetBeansProjects\\ultrassom\\arquivos teste\\%s", gName));
+        DoubleMatrix g = convertToDoubleMatrix(gVector);
 
         DoubleMatrix reconstructedImage;
         if (algorithmChoice == 1) {
@@ -112,5 +119,9 @@ public class ImageReconstructionService {
         result.setEndTime(endTime);
 
         return result;
+    }
+
+    public void generateImage(DoubleMatrix f, String outputPath) {
+        ImageGenerator.generateImage(f, outputPath);
     }
 }

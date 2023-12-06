@@ -8,6 +8,13 @@ public class ReconstructionRequest {
     private DoubleMatrix H;
     private int algorithmChoice;
 
+    public ReconstructionRequest(User user, DoubleMatrix signalVector, DoubleMatrix modelMatrix, int algorithmChoice) {
+        this.user = user;
+        this.g = signalVector;
+        this.H = modelMatrix;
+        this.algorithmChoice = algorithmChoice;
+    }
+
     public User getUser() {
         return user;
     }

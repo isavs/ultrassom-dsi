@@ -23,21 +23,19 @@ import java.nio.file.StandardCopyOption;
 public class FileUploadController {
     @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping
-    public String handleFileUpload(@RequestParam("file") MultipartFile file) {
+    public String handleFileUpload(
+        @RequestParam("file") MultipartFile file,
+        @RequestParam("uniqueFileName") String uniqueFileName) {
         if (file != null && !file.isEmpty()) {
             try {
                 // Escolha o diretório onde deseja salvar o arquivo localmente
-                String uploadDir = "C:\\Users\\Isabela V. Santos\\Documents\\NetBeansProjects\\ultrassom\\src\\main\\java\\dis\\ultrassom";
+                String uploadDir = "C:\\Users\\Isabela V. Santos\\Documents\\NetBeansProjects\\ultrassom\\arquivos teste";
                 
                 // Certifique-se de que o diretório exista; crie-o se necessário
                 File directory = new File(uploadDir);
                 if (!directory.exists()) {
                     directory.mkdirs();
                 }
-
-                // Gere um nome de arquivo único para evitar conflitos
-                String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-                String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
 
                 // Caminho completo para o arquivo no diretório de upload
                 Path uploadPath = Path.of(uploadDir, uniqueFileName);

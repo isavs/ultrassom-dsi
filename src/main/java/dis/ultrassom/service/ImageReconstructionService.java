@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
+import java.util.ArrayList;
 
 import org.jblas.DoubleMatrix;
 
@@ -43,7 +44,7 @@ public class ImageReconstructionService {
     }
 
     private List<String[]> readMatrixFromCSV(String filename) {
-        String filepath = String.format("C:\\Users\\Isabela V. Santos\\Documents\\NetBeansProjects\\ultrassom\\arquivos teste\\%s", filename);
+        String filepath = String.format("C:\\Users\\isabe\\Downloads\\ultrassom-dsi-untested-pseudo-architecture\\arquivos teste\\%s", filename);
 
         List<String[]> matrixFromCSV = convertFileToString(filepath);
 
@@ -93,11 +94,23 @@ public class ImageReconstructionService {
         return matrix;
     }
 
+    public List<String[]> getSignal() {
+        String input = "0.27603;0.6797;0.6551;0.16261;0.119;0.49836;0.95974;0.34039;0.58527;0.22381";
+
+        List<String[]> data = new ArrayList<String[]>();
+
+        String[] splitValues = input.split(";");
+
+        data.add(splitValues);
+
+        return data;
+    }
+
     public ReconstructionResult reconstructImage(User user, String gName, int algorithmChoice) {
         LocalDateTime startTime = LocalDateTime.now();
 
         DoubleMatrix H = getRandomModelMatrix();
-        List<String[]> gVector = convertFileToString(String.format("C:\\Users\\Isabela V. Santos\\Documents\\NetBeansProjects\\ultrassom\\arquivos teste\\%s", gName));
+        List<String[]> gVector = getSignal();
         DoubleMatrix g = convertToDoubleMatrix(gVector);
 
         DoubleMatrix reconstructedImage;

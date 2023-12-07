@@ -30,7 +30,7 @@ public class UltrassomController {
 
         ReconstructionResult result = reconstructionService.reconstructImage(user, uniqueFileName, algorithmChoice);
 
-        reconstructionService.generateImage(result.getImage(), "C:\\Users\\Isabela V. Santos\\Documents\\NetBeansProjects\\ultrassom\\arquivos teste");
+        reconstructionService.generateImage(result.getImage(), "C:\\Users\\isabe\\Downloads\\ultrassom-dsi-untested-pseudo-architecture\\arquivos teste");
 
         return result;
     }

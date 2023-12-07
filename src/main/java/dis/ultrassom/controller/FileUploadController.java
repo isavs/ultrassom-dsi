@@ -29,7 +29,7 @@ public class FileUploadController {
         if (file != null && !file.isEmpty()) {
             try {
                 // Escolha o diretório onde deseja salvar o arquivo localmente
-                String uploadDir = "C:\\Users\\Isabela V. Santos\\Documents\\NetBeansProjects\\ultrassom\\arquivos teste";
+                String uploadDir = "C:\\Users\\isabe\\Downloads\\ultrassom-dsi-untested-pseudo-architecture\\arquivos teste";
                 
                 // Certifique-se de que o diretório exista; crie-o se necessário
                 File directory = new File(uploadDir);
